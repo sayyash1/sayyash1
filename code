@@ -1,0 +1,35 @@
+from pytrends.request import TrendReq
+import pandas as pd
+import time
+startTime = time.time()
+pytrend = TrendReq(hl='en-us', tz=360)
+
+dataset = []
+
+def check_trends():      
+     pytrend.build_payload(
+     kw_list='bitcoin',
+     cat=0,
+     timeframe='2015-01-01 2022-09-19',
+     geo='')
+     data = pytrend.interest_over_time()
+     mean = round(data.mean(),2)
+     avg = round(data[kw][-52],mean(),2)
+     trend = round(((avg/mean[kw])-1)*100,2)
+     print('The average 7 years interest ' + kw + 'was' + str(mean[kw]))
+     print('The last year interest of ' + kw + 'compared to the last 7 years' + 'has changed by' + str(trend)+ '%.')
+
+     if not data.empty:
+          data = data.drop(labels=['isPartial'],axis='columns')
+          dataset.append(data)
+
+for kw in 'bitcoin':
+      keywords.append(kw)
+      check_trends()
+      keywords.pop()
+
+result = pd.concat(dataset, axis=1)
+result.to_csv('search_trends.csv')
+
+executionTime = (time.time() - startTime)
+print('Execution time in sec.: ' + str(executionTime))
